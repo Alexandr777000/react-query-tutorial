@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {useQuery} from "react-query";
+import Planet from "./Planet";
 
 // фильмы
 const useGetFilms = () => {
@@ -12,14 +13,12 @@ const useGetFilms = () => {
 
 // один фильм
 const useGetFilm = (film) => {
-    // if (!film) return;
-
     return useQuery(film, async () => {
-        return fetch(`https://swapi.dev/api/films/?search=${film}`)
+        return fetch(`https://swapi.dev/api/filxxms/?search=${film}`)
             .then((res) => res.json());
     }, {
-        // принимает булево значение только...
-        enabled: !! film
+        retry: 6,
+        retryDelay: 2000
     });
 };
 
@@ -48,6 +47,13 @@ const SearchFilm = ({film}) => {
                     return (
                         <div key={film.title}>
                             {film.title}
+                            {
+                                film.planets
+                                    .map(planet =>
+                                        <Planet
+                                            key={planet}
+                                            planetURL={planet}/>)
+                            }
                         </div>
                     );
                 })
