@@ -8,8 +8,10 @@ const Films = () => {
         isError,
         error,
     } = useQuery("key", async () => {
-        return fetch("https://swapi.dev/api/films").then(res => res.json());
-    });
+            return fetch("https://swapi.dev/api/films").then(res => res.json());
+        },
+        {refetchOnWindowFocus: false},
+    );
 
     return (
         <div>
