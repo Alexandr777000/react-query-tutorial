@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {useQuery} from "react-query";
 
 const Films = () => {
@@ -13,10 +13,9 @@ const Films = () => {
             return fetch("https://swapi.dev/api/films").then(res => res.json());
         },
         {
-            // refetchOnWindowFocus: false
-            // scaleTime: 6000, -- свежие данные 6 сек будут
-            // scaleTime: Infinity -- данные всегда будут свежие(обновлять будем вречную)
-
+            // время жизни данных в кеше навсегда и должны сами заботится подчишать за
+            // собой
+            cacheTime: Infinity,
         },
     );
 
