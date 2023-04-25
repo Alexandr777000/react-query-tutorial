@@ -12,15 +12,26 @@ const useGetFilms = () => {
 
 // один фильм
 const useGetFilm = (film) => {
+    // if (!film) return;
+
     return useQuery(film, async () => {
         return fetch(`https://swapi.dev/api/films/?search=${film}`)
             .then((res) => res.json());
-    }, {});
+    }, {
+        // принимает булево значение только...
+        enabled: !! film
+    });
 };
 
 // поиск по введенному в инпут значению
-const SearchFilm = ({ film }) => {
-    const { data:{ results = [] } = {}, isLoading, error, isError, isFetching } = useGetFilms();
+const SearchFilm = ({film}) => {
+    const {
+        data: {results = []} = {},
+        isLoading,
+        error,
+        isError,
+        isFetching
+    } = useGetFilms();
 
     const filteredFilms = results?.filter((f) =>
         f.title.toLowerCase().includes(film.toLowerCase())
