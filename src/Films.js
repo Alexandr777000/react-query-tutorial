@@ -1,24 +1,31 @@
 import React, {useState} from "react";
 import {useQuery} from "react-query";
 
-const Films = ({queryKey}) => {
-    const {
-        data: {results = []} = {},
-        isLoading,
-        isError,
-        error,
-        // теперь есть индикатор на экране когда данные обновляются
-        isFetching,
-    } = useQuery(queryKey, async () => {
+const useGetFilms = () => {
+    return useQuery("films", async () => {
             return fetch("https://swapi.dev/api/films").then(res => res.json());
         },
-        {
-
-        },
+        {},
     );
+};
+
+const FilmsLength = () => {
+    const {data: {results = []} = {}, isLoading,} = useGetFilms();
+
+    return isLoading
+        ? "Loading..."
+        : (<p>Количество фильмов: {results.length}</p>);
+};
+
+const Films = ({queryKey}) => {
+    const {
+        data: {results = []} = {}, isLoading, isError, error, isFetching,
+    }
+        = useGetFilms();
 
     return (
         <div>
+            <FilmsLength/>
             {isLoading
                 ? "Loading..."
                 : isError
