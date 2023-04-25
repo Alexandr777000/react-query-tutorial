@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useQuery} from "react-query";
 
-const Films = () => {
+const Films = ({queryKey}) => {
     const {
         data: {results = []} = {},
         isLoading,
@@ -9,13 +9,11 @@ const Films = () => {
         error,
         // теперь есть индикатор на экране когда данные обновляются
         isFetching,
-    } = useQuery("key", async () => {
+    } = useQuery(queryKey, async () => {
             return fetch("https://swapi.dev/api/films").then(res => res.json());
         },
         {
-            // время жизни данных в кеше навсегда и должны сами заботится подчишать за
-            // собой
-            cacheTime: Infinity,
+
         },
     );
 

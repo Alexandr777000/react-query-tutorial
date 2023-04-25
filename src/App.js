@@ -8,16 +8,11 @@ import {useState} from "react";
 const queryClient = new QueryClient();
 
 function App() {
-    const [isOpen, setIsOpen] = useState(false);
-
-
     return (
         <QueryClientProvider client={queryClient}>
             <div className="App">
-                <button onClick={() => setIsOpen(!isOpen)}>
-                    click
-                </button>
-                {isOpen ? <Films/> : null}
+                <Films queryKey={'films1'}/>
+                <Films queryKey={'films1'}/>
             </div>
             <ReactQueryDevtools/>
         </QueryClientProvider>
