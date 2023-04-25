@@ -5,7 +5,7 @@ import {ReactQueryDevtools} from "react-query/devtools";
 import {useState} from "react";
 
 // Создаем клиента
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 function App() {
     return (
