@@ -12,7 +12,7 @@ const Films = () => {
     } = useQuery("key", async () => {
             return fetch("https://swapi.dev/api/films").then(res => res.json());
         },
-        {refetchOnWindowFocus: false},
+        // {refetchOnWindowFocus: false},
     );
 
     return (
