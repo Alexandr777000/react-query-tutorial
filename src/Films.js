@@ -2,20 +2,23 @@ import React from "react";
 import {useQuery} from "react-query";
 
 const Films = () => {
-    const {data: {results = []} = {}, ...otherData} = useQuery("key", () => {
+    const {data: {results = []} = {}, isLoading} = useQuery("key", async () => {
+        await new Promise(resolve => setTimeout(resolve, 1500));
         return fetch("https://swapi.dev/api/films").then(res => res && res.json());
     });
     // console.log(res);
-    console.log(otherData);
+    // console.log(otherData);
 
     return (
         <div>
-            {results.map(film => {
-                return (
-                    <div key={film.title}>
-                        {film.title}
-                    </div>);
-            })}
+            {isLoading
+                ? "Loading..."
+                : results.map(film => {
+                    return (
+                        <div key={film.title}>
+                            {film.title}
+                        </div>);
+                })}
         </div>
     );
 };
