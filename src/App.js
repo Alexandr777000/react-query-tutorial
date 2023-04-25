@@ -1,6 +1,7 @@
 import "./App.css";
 import Films from "./Films";
 import {QueryClient, QueryClientProvider} from "react-query";
+import {ReactQueryDevtools} from "react-query/devtools";
 
 // Создаем клиента
 const queryClient = new QueryClient();
@@ -13,6 +14,7 @@ function App() {
             <div className="App">
                 <Films/>
             </div>
+            <ReactQueryDevtools/>
         </QueryClientProvider>
     );
 }

@@ -6,18 +6,10 @@ const Films = () => {
         data: {results = []} = {},
         isLoading,
         isError,
-        // вытаскиваем нашу ошибку текстовую
         error,
-        ...arg
     } = useQuery("key", async () => {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-// перед получением данных генерируем ошибку
-//         throw new Error("Test error");
-
-        return fetch("https://swapi.dev/api/fildms").then(res => res && res.json());
+        return fetch("https://swapi.dev/api/films").then(res => res.json());
     });
-
-    console.log(arg);
 
     return (
         <div>
