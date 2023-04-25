@@ -7,6 +7,8 @@ const Films = () => {
         isLoading,
         isError,
         error,
+        // теперь есть индикатор на экране когда данные обновляются
+        isFetching,
     } = useQuery("key", async () => {
             return fetch("https://swapi.dev/api/films").then(res => res.json());
         },
@@ -25,6 +27,9 @@ const Films = () => {
                                 {film.title}
                             </div>);
                     })}
+            <br/>
+            {/*теперь есть индикатор на экране когда данные обновляются*/}
+            {isFetching ? "Обновление..." : null}
         </div>
     );
 };
