@@ -1,96 +1,40 @@
 import React, {useState} from "react";
+import FilmPAge from "./FilmPAge";
 import {useQuery} from "react-query";
-import Planet from "./Planet";
 
-// фильмы
 const useGetFilms = () => {
-    return useQuery("films", async () => {
-            return fetch("https://swapi.dev/api/films").then(res => res.json());
-        },
-        {},
+    const {data} = useQuery(["films"], () =>
+        fetch("https://swapi.dev/api/films").then(res => res.json())
     );
-};
-
-// один фильм
-const useGetFilm = (film) => {
-    return useQuery(film, async () => {
-        return fetch(`https://swapi.dev/api/filxxms/?search=${film}`)
-            .then((res) => res.json());
-    }, {
-        retry: 6,
-        retryDelay: 2000
-    });
-};
-
-// поиск по введенному в инпут значению
-const SearchFilm = ({film}) => {
-    const {
-        data: {results = []} = {},
-        isLoading,
-        error,
-        isError,
-        isFetching
-    } = useGetFilms();
-
-    const filteredFilms = results?.filter((f) =>
-        f.title.toLowerCase().includes(film.toLowerCase())
-    );
-
-    return (
-        <div>
-            {isLoading ? (
-                "Loading..."
-            ) : isError ? (
-                error.message
-            ) : (
-                filteredFilms.map((film) => {
-                    return (
-                        <div key={film.title}>
-                            {film.title}
-                            {
-                                film.planets
-                                    .map(planet =>
-                                        <Planet
-                                            key={planet}
-                                            planetURL={planet}/>)
-                            }
-                        </div>
-                    );
-                })
-            )}
-            {isFetching ? "Обновление..." : null}
-        </div>
-    );
+    return {data};
 };
 
 export const Films = ({queryKey}) => {
-    const [film, setFilm] = useState("");
+    const [filmUrl, setFilmUrl] = useState("");
 
-    return (
-        <div>
-            <input
-                type={"text"}
-                value={film}
-                onChange={(e) => setFilm(e.target.value)}/>
-            {/*прокинем наш фильм то что ввели в запрос*/}
-            <SearchFilm film={film}/>
-        </div>
-    );
+    const {data: {results = []} = {}} = useGetFilms();
+    console.log(results);
+
+    return filmUrl
+        ? (<>
+                {/*сбросим на урл*/}
+                <button onClick={ () => setFilmUrl('')}>back</button>
+                <FilmPAge url={filmUrl}/>
+            </>
+        )
+        : <ul>{results.map(film => {
+            return (
+                <li key={film.url}>
+                    <strong>Film: </strong>
+                    <a href="#" onClick={() => setFilmUrl(film.url)}>
+                        {film.title}
+                    </a>
+                </li>
+            );
+        })}</ul>;
 };
 
 /*
-обернули в провайдер сделали запрос вывели в консоль осмотрели что пришло в data
- объекте нам
-res.json() - тут все данные
-
-
-
-
-
-
-
-
-
 
 
  */

@@ -3,10 +3,18 @@ import {useQuery} from "react-query";
 
 const useGetPlanet = (planetURL) => {
     return useQuery(["planet", planetURL], () => {
-        fetch(planetURL).then(res => res.json());
+        return new Promise(resolve =>
+            setTimeout(resolve, 3000),
+        )
+            .then(() =>
+                fetch(planetURL)
+                    .then(res => res.json()));
     }, {
         // не делать запросы если нет урла планеты...
-        enabled: !!planetURL
+        enabled: !!planetURL,
+        initialData: {
+            name: "initial data"
+        }
     });
 };
 
@@ -15,7 +23,7 @@ const Planet = ({planetURL}) => {
     const {data, isLoading} = useGetPlanet(planetURL);
 
     return (
-        <div>planet: {isLoading ? 'Loading...' : data?.name} {data?.name}</div>
+        <div>planet: {isLoading ? "Loading..." : data?.name} {data?.name}</div>
     );
 };
 
