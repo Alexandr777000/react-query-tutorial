@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {useQuery} from "react-query";
 
+// фильмы
 const useGetFilms = () => {
     return useQuery("films", async () => {
             return fetch("https://swapi.dev/api/films").then(res => res.json());
@@ -8,29 +9,29 @@ const useGetFilms = () => {
         {},
     );
 };
-const useGetPlanets = () => {
-    return useQuery("planets", async () => {
-            return fetch("https://swapi.dev/api/planets").then(res => res.json());
+
+// один фильм
+const useGetFilm = ({film}) => {
+    return useQuery(film, async () => {
+            return fetch(`https://swapi.dev/api/films?search=${film}`)
+                .then(res => res.json());
         },
         {},
     );
 };
 
-const FilmsLength = () => {
-    const {data: {results = []} = {}, isLoading} = useGetFilms();
-
-    return isLoading
-        ? "Loading..."
-        : (<p>Количество фильмов: {results.length}</p>);
-};
-
-export const Films = ({queryKey}) => {
+// поиск по введенному в инпут значению
+const SearchFilm = ({film}) => {
     const {
-        data: {results = []} = {}, isLoading, isError, error, isFetching} = useGetFilms();
+        data: {results = []} = {},
+        isLoading,
+        error,
+        isError,
+        isFetching
+    } = useGetFilm(film);
 
     return (
         <div>
-            <FilmsLength/>
             {isLoading
                 ? "Loading..."
                 : isError
@@ -41,38 +42,25 @@ export const Films = ({queryKey}) => {
                                 {film.title}
                             </div>);
                     })}
-            <br/>
             {isFetching ? "Обновление..." : null}
-            <br/>
-            {`_____________________________________`}
-            <Planets/>
         </div>
     );
 };
 
-export const Planets = ({queryKey}) => {
-    const {
-        data: {results = []} = {}, isLoading, isError, error, isFetching} = useGetPlanets();
+export const Films = ({queryKey}) => {
+    const [film, setFilm] = useState("");
 
     return (
         <div>
-            {isLoading
-                ? "Loading..."
-                : isError
-                    ? error.message
-                    : results.map(planet => {
-                        return (
-                            <div key={planet.name}>
-                                {planet.name}
-                            </div>);
-                    })}
-            <br/>
-            {isFetching ? "Обновление..." : null}
+            <input
+                type={"text"}
+                value={film}
+                onChange={(e) => setFilm(e.target.value)}/>
+            {/*прокинем наш фильм то что ввели в запрос*/}
+            <SearchFilm film={film}/>
         </div>
     );
 };
-
-
 
 /*
 обернули в провайдер сделали запрос вывели в консоль осмотрели что пришло в data
