@@ -1,5 +1,5 @@
 import "./App.css";
-import Films from "./Films";
+import {Films} from "./Films";
 import {QueryClient, QueryClientProvider} from "react-query";
 import {ReactQueryDevtools} from "react-query/devtools";
 import {useState} from "react";

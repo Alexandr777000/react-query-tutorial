@@ -8,20 +8,25 @@ const useGetFilms = () => {
         {},
     );
 };
+const useGetPlanets = () => {
+    return useQuery("planets", async () => {
+            return fetch("https://swapi.dev/api/planets").then(res => res.json());
+        },
+        {},
+    );
+};
 
 const FilmsLength = () => {
-    const {data: {results = []} = {}, isLoading,} = useGetFilms();
+    const {data: {results = []} = {}, isLoading} = useGetFilms();
 
     return isLoading
         ? "Loading..."
         : (<p>Количество фильмов: {results.length}</p>);
 };
 
-const Films = ({queryKey}) => {
+export const Films = ({queryKey}) => {
     const {
-        data: {results = []} = {}, isLoading, isError, error, isFetching,
-    }
-        = useGetFilms();
+        data: {results = []} = {}, isLoading, isError, error, isFetching} = useGetFilms();
 
     return (
         <div>
@@ -37,13 +42,37 @@ const Films = ({queryKey}) => {
                             </div>);
                     })}
             <br/>
-            {/*теперь есть индикатор на экране когда данные обновляются*/}
+            {isFetching ? "Обновление..." : null}
+            <br/>
+            {`_____________________________________`}
+            <Planets/>
+        </div>
+    );
+};
+
+export const Planets = ({queryKey}) => {
+    const {
+        data: {results = []} = {}, isLoading, isError, error, isFetching} = useGetPlanets();
+
+    return (
+        <div>
+            {isLoading
+                ? "Loading..."
+                : isError
+                    ? error.message
+                    : results.map(planet => {
+                        return (
+                            <div key={planet.name}>
+                                {planet.name}
+                            </div>);
+                    })}
+            <br/>
             {isFetching ? "Обновление..." : null}
         </div>
     );
 };
 
-export default Films;
+
 
 /*
 обернули в провайдер сделали запрос вывели в консоль осмотрели что пришло в data
