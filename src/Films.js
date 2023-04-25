@@ -12,7 +12,12 @@ const Films = () => {
     } = useQuery("key", async () => {
             return fetch("https://swapi.dev/api/films").then(res => res.json());
         },
-        // {refetchOnWindowFocus: false},
+        {
+            // refetchOnWindowFocus: false
+            // scaleTime: 6000, -- свежие данные 6 сек будут
+            // scaleTime: Infinity -- данные всегда будут свежие(обновлять будем вречную)
+
+        },
     );
 
     return (
